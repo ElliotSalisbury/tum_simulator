@@ -18,7 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
 ## System dependencies are found with CMake's conventions
 find_package(Boost REQUIRED COMPONENTS thread)
 find_package(gazebo REQUIRED)
-
+find_package(OpenCV REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -86,7 +86,7 @@ generate_messages(
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-  LIBRARIES diffdrive_plugin_6w reset_plugin hector_gazebo_ros_imu hector_gazebo_ros_magnetic hector_gazebo_ros_gps hector_gazebo_ros_sonar hector_gazebo_ros_baro hector_gazebo_quadrotor_simple_controller hector_gazebo_quadrotor_state_controller
+  LIBRARIES diffdrive_plugin_6w reset_plugin hector_gazebo_ros_imu hector_gazebo_ros_magnetic hector_gazebo_ros_gps hector_gazebo_ros_sonar hector_gazebo_ros_baro hector_gazebo_quadrotor_simple_controller hector_gazebo_quadrotor_state_controller elliot_gazebo_ros_multicamera
  CATKIN_DEPENDS image_transport
  DEPENDS system_lib
 )
@@ -104,6 +104,7 @@ include_directories(
   ${Boost_INCLUDE_DIRS}
   ${GAZEBO_INCLUDE_DIRS}
   ${SDFormat_INCLUDE_DIRS}
+	${OpenCV_INCLUDE_DIRS}
 )
 
 ## Declare a cpp library
@@ -119,6 +120,13 @@ target_link_libraries(hector_gazebo_ros_imu ${Boost_LIBRARIES})
 add_library(hector_gazebo_ros_magnetic src/gazebo_ros_magnetic.cpp)
 add_library(hector_gazebo_ros_gps src/gazebo_ros_gps.cpp)
 add_library(hector_gazebo_ros_sonar src/gazebo_ros_sonar.cpp)
+
+add_library(elliot_gazebo_ros_camera_utils src/gazebo_ros_camera_utils.cpp)
+add_library(elliot_MultiCameraPlugin src/MultiCameraPlugin.cpp)
+add_library(elliot_gazebo_ros_multicamera src/gazebo_ros_multicamera.cpp)
+target_link_libraries(elliot_gazebo_ros_multicamera elliot_MultiCameraPlugin)
+target_link_libraries(elliot_gazebo_ros_multicamera elliot_gazebo_ros_camera_utils)
+target_link_libraries(elliot_gazebo_ros_multicamera ${OpenCV_LIBRARIES})
 
 add_library(hector_gazebo_ros_baro src/gazebo_ros_baro.cpp)
 add_dependencies(hector_gazebo_ros_baro cvg_sim_msgs_gencpp)
