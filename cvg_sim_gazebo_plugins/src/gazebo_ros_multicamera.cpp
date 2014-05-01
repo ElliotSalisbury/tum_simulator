@@ -272,7 +272,7 @@ void GazeboRosMultiCamera::updateCameraAngle(float yaw, float pitch) {
 
 				cv::Mat eye = rotation * model;
 
-				ROS_FATAL_STREAM("Eye" << eye.at<float>(0,0) << "," << eye.at<float>(1,0) << "," << eye.at<float>(2,0) << "," << eye.at<float>(3,0));
+//				ROS_FATAL_STREAM("Eye" << eye.at<float>(0,0) << "," << eye.at<float>(1,0) << "," << eye.at<float>(2,0) << "," << eye.at<float>(3,0));
 
 				cv::Mat clip = this->perspectiveTransform_ * eye;
 
@@ -296,7 +296,7 @@ void GazeboRosMultiCamera::updateCameraAngle(float yaw, float pitch) {
 
 				outputQuad[j] = cv::Point2f( w2 + clip.at<float>(0,0)*w2, h2 + clip.at<float>(1,0)*h2);
 
-				ROS_FATAL_STREAM("" << clip.at<float>(0,0) << "," << clip.at<float>(1,0) << "," << clip.at<float>(2,0) << "," << clip.at<float>(3,0));
+//				ROS_FATAL_STREAM("" << clip.at<float>(0,0) << "," << clip.at<float>(1,0) << "," << clip.at<float>(2,0) << "," << clip.at<float>(3,0));
 			}
 			this->transforms_[i] = cv::getPerspectiveTransform( inputQuad, outputQuad );
 		}
@@ -314,12 +314,6 @@ void GazeboRosMultiCamera::OnNewFrame(const boost::shared_ptr<msgs::ImagesStampe
     common::Time cur_time = this->util->world_->GetSimTime();
     if (cur_time - this->util->last_update_time_ >= this->util->update_period_)
     {
-			this->subImages_[0] = cv::Scalar(0,255,0);
-			this->subImages_[1] = cv::Scalar(255,0,0);
-			this->subImages_[2] = cv::Scalar(0,0,255);
-			this->subImages_[3] = cv::Scalar(255,255,0);
-			this->subImages_[4] = cv::Scalar(0,255,255);
-			this->subImages_[5] = cv::Scalar(255,0,255);
 			this->subImages_[6] = cv::Scalar(0,0,0);
 			for(int i=0; i<msg->image_size(); i++) {
 				const msgs::Image image = msg->image(i);
@@ -328,12 +322,12 @@ void GazeboRosMultiCamera::OnNewFrame(const boost::shared_ptr<msgs::ImagesStampe
 				memcpy(workableData, image.data().c_str(), imageSize);
 
 				cv::Mat cvImage(image.height(), image.width(), CV_8UC3, workableData);
-				//cvImage.copyTo(this->subImages_[i]);
+				cvImage.copyTo(this->subImages_[i]);
 
-					cv::Mat output;
-					cv::warpPerspective(cvImage,output,this->transforms_[i],cvImage.size());
-					cv::addWeighted(this->subImages_[6],1.0,output,1.0,0.0,this->subImages_[6]);
-					output.copyTo(this->subImages_[i],output);
+				//	cv::Mat output;
+//					cv::warpPerspective(cvImage,output,this->transforms_[i],cvImage.size());
+//					cv::addWeighted(this->subImages_[6],1.0,output,1.0,0.0,this->subImages_[6]);
+//					output.copyTo(this->subImages_[i],output);
 
 				delete[] workableData;
 			}
@@ -342,8 +336,8 @@ void GazeboRosMultiCamera::OnNewFrame(const boost::shared_ptr<msgs::ImagesStampe
 			this->util->last_update_time_ = cur_time;
 		}
 	}
-	static float angle = 0.0f;
-	angle += 0.01f;
-	this->updateCameraAngle(angle,cos(angle));
+	//static float angle = 0.0f;
+//	angle += 0.01f;
+//	this->updateCameraAngle(angle,cos(angle));
 }
 }
