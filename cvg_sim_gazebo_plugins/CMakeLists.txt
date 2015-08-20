@@ -13,6 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   sensor_msgs
   std_msgs
+  tf
 )
 
 ## System dependencies are found with CMake's conventions
@@ -108,32 +109,38 @@ include_directories(
 
 ## Declare a cpp library
 add_library(diffdrive_plugin_6w src/diffdrive_plugin_6w.cpp)
-target_link_libraries(diffdrive_plugin_6w ${Boost_LIBRARIES})
+target_link_libraries(diffdrive_plugin_6w ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 
 add_library(reset_plugin src/reset_plugin.cpp)
+target_link_libraries(reset_plugin ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${image_transport_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 
 add_library(hector_gazebo_ros_imu src/gazebo_ros_imu.cpp)
 add_dependencies(hector_gazebo_ros_imu cvg_sim_gazebo_plugins_gencpp)
-target_link_libraries(hector_gazebo_ros_imu ${Boost_LIBRARIES})
+target_link_libraries(hector_gazebo_ros_imu ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 
 add_library(hector_gazebo_ros_magnetic src/gazebo_ros_magnetic.cpp)
+target_link_libraries(hector_gazebo_ros_magnetic ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 add_library(hector_gazebo_ros_gps src/gazebo_ros_gps.cpp)
+target_link_libraries(hector_gazebo_ros_gps ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 add_library(hector_gazebo_ros_sonar src/gazebo_ros_sonar.cpp)
+target_link_libraries(hector_gazebo_ros_sonar ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 
 add_library(hector_gazebo_ros_baro src/gazebo_ros_baro.cpp)
+target_link_libraries(hector_gazebo_ros_baro ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 add_dependencies(hector_gazebo_ros_baro cvg_sim_msgs_gencpp)
 
 add_library(hector_gazebo_quadrotor_simple_controller src/quadrotor_simple_controller.cpp)
+target_link_libraries(hector_gazebo_quadrotor_simple_controller ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 add_dependencies(hector_gazebo_quadrotor_simple_controller ardrone_autonomy_gencpp)
 
 add_library(hector_gazebo_quadrotor_state_controller src/quadrotor_state_controller.cpp)
 add_dependencies(hector_gazebo_quadrotor_state_controller ardrone_autonomy_gencpp)
-target_link_libraries(hector_gazebo_quadrotor_state_controller ${image_transport_LIBRARIES})
+target_link_libraries(hector_gazebo_quadrotor_state_controller ${catkin_LIBRARIES} ${Boost_LIBRARIES} ${image_transport_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 
 
 ## Declare a cpp executable
 add_executable(test_trajectory src/test_trajectory.cpp)
-target_link_libraries(test_trajectory ${catkin_LIBRARIES})
+target_link_libraries(test_trajectory ${catkin_LIBRARIES} ${GAZEBO_LIBRARIES} ${SDF_LIBRARIES})
 
 ## Add cmake target dependencies of the executable/library
 ## as an example, message headers may need to be generated before nodes
